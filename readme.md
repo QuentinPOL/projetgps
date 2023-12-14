@@ -39,7 +39,6 @@ Base_PROJET
     /css    
     /img    
     /js  
-    /scss    
     /vendor    
     .travis.yml  
     gulpfile.js  
