@@ -11,7 +11,7 @@ PilotageLumiere::PilotageLumiere(int adressValue, int red, int green, int blue, 
 	DasUsbCommand = nullptr;
 	interface_open = 0;
 
-	//Chargement de la DLL
+	//Chargement de la DLL (A remplacer si le chemin du projet n'est plus  le même)
 	g_dasusbdll = LoadLibraryA("C:\\Users\\Quentin Pollet\\Desktop\\qtDMXWebsocket\\qtDMXWebsocket\\DasHard2006.dll");
 
 	//Verification du chargement

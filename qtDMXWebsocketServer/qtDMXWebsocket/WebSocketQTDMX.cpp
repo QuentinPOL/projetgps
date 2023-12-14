@@ -40,7 +40,7 @@ void WebSocketQTDMX::onServerNewConnection()
         QObject::connect(clientWeb, &QWebSocket::textMessageReceived, this, &WebSocketQTDMX::onWebClientReadyRead);
         QObject::connect(clientWeb, &QWebSocket::disconnected, this, &WebSocketQTDMX::onClientDisconnected);
 
-        clientWeb->sendTextMessage("TEST");
+        clientWeb->sendTextMessage("Connecté !");
     }
 }
 
@@ -56,6 +56,7 @@ void WebSocketQTDMX::onClientDisconnected()
         QObject::disconnect(objWeb, &QWebSocket::disconnected, this, &WebSocketQTDMX::onClientDisconnected);
 
         // [WebSocket]
+        objWeb->sendTextMessage("Déconnecté !");
         objWeb->deleteLater();
     }
 }
@@ -77,30 +78,36 @@ void WebSocketQTDMX::onWebClientReadyRead(const QString& message)
             // On va faire quelque chose selon l'entete de cette réponse
             if (jsonMessage["type"].toString() == "trameDMX512") // Si c'est une authentification
             {
-                //if (piloteLum->isInterfaceOpen() > 0)
-                //{
+                if (piloteLum->isInterfaceOpen() > 0)
+                {
                     // On recupere l'adresse de la lumiere
-                int adressLum = jsonMessage["adressLum"].toInt();
+                    piloteLum->setAdressValue(jsonMessage["adressLum"].toInt());
 
-                // Ensuite les couleurs
-                int red = jsonMessage["redValue"].toInt();
-                int green = jsonMessage["greenValue"].toInt();
-                int blue = jsonMessage["blueValue"].toInt();
-                int white = jsonMessage["whiteValue"].toInt();
+                    // Ensuite les couleurs
+                    piloteLum->setRedValue(jsonMessage["redValue"].toInt());
+                    piloteLum->setGreenValue(jsonMessage["greenValue"].toInt());
+                    piloteLum->setBlueValue(jsonMessage["blueValue"].toInt());
+                    piloteLum->setWhiteValue(jsonMessage["whiteValue"].toInt());
 
-                // Et enfin le checbox pour savoir si on fait un changement automatique de couleur
-                bool changeAutoLum = jsonMessage["changeAutoLum"].toBool();
+                    // Et enfin le checbox pour savoir si on fait un changement automatique de couleur
+                    if(jsonMessage["changeAutoLum"].toBool() == true)
+                    {
+                        // Voici un exemple de comment est construite la trame ainsi que comment elle est construite
+                        // exemple si la lumiere est sur le canal 12, alors l'octet dmxBlock[12] contient
+                        // un ensemble de 8 bits representant les informations à envoyer à la lumiere : intensite couleur ect
+                        // Attention une lumiere peut avoir plusieur cannaux
+                        // exemple une led 3 couleurs aura 3 cannaux pour rouge vert bleu
+                        // donc la deuxieme lampe devra etre configure sur un canal 4
 
-                // Voici un exemple de comment est construite la trame ainsi que comment elle est construite
-                // exemple si la lumiere est sur le canal 12, alors l'octet dmxBlock[12] contient
-                // un ensemble de 8 bits representant les informations à envoyer à la lumiere : intensite couleur ect
-                // Attention une lumiere peut avoir plusieur cannaux
-                // exemple une led 3 couleurs aura 3 cannaux pour rouge vert bleu
-                // donc la deuxieme lampe devra etre configure sur un canal 4
+                        int time = QTime::currentTime().msecsSinceStartOfDay();  // Obtient le temps actuel en millisecondes
+                        piloteLum->setRedValue((time / 10) % 256);    // Dégradé rouge
+                        piloteLum->setGreenValue((time / 15) % 256);  // Dégradé vert
+                        piloteLum->setBlueValue((time / 20) % 256);   // Dégradé bleu
+                        piloteLum->setWhiteValue((time / 25) % 256);   // Dégradé bleu
+                    }
 
-                // Si on veut faire un défilement de couleur automatique
-                
-                //}
+                    piloteLum->sendTrame(); // On ennvoie la trame
+                }
             }
         }
     }
