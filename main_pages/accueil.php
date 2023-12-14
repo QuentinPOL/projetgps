@@ -24,7 +24,6 @@ if (isset($_POST['deconnexion'])) {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,23 +43,8 @@ if (isset($_POST['deconnexion'])) {
     <!-- Custom styles for this template-->
     <link href="../assets//css/sb-admin-2.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-    <!-- Inclure les fichiers CSS de Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-
-    <!-- Inclure votre code JavaScript Leaflet -->
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-
-    <!-- CSS personnalisé pour définir la taille de la carte -->
-    <style>
-        #map {
-            height: 320px; /* Ajustez la hauteur selon vos besoins */
-            width: 100%;   /* Ajustez la largeur selon vos besoins */
-        }
-    </style>
-    
+    <!-- CSS POUR LINTERFACE CUSTOM-->
+    <link href="../assets//css/sb-admin-2.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -152,6 +136,41 @@ if (isset($_POST['deconnexion'])) {
                     </ul>
                 </nav>
                 <p id="status">Status : Aucun</p>
+
+                <fieldset sty>
+                    <label for="r">R</label>
+                    <input type="range" min="0" max="255" id="r" step="1" value="0">
+                    <output for="r" id="r_out">0</output>
+                </fieldset>  
+                
+                <fieldset>
+                    <label for="g">G</label>
+                    <input type="range" min="0" max="255" id="g" step="1" value="0">
+                    <output for="g" id="g_out">0</output>
+                </fieldset>
+                
+                <fieldset>
+                    <label for="b">B</label>
+                    <input type="range" min="0" max="255" id="b" step="1" value="0">
+                    <output for="b" id="b_out">0</output>
+                </fieldset>
+
+                <fieldset>
+                    <label for="w">W</label>
+                    <input type="range" min="0" max="255" id="w" step="1" value="0">
+                    <output for="w" id="w_out">0</output>
+                </fieldset>
+
+                <fieldset>
+                    <input type="checkbox" id="changementAuto" name="changementAuto">
+                    <label for="changementAuto">Changement automatique</label>
+                </fieldset>
+
+                <fieldset id="adressLum">
+                    <label for="adress">Adresse Lumière</label>
+                    <input type="range" min="1" max="510" id="adress" step="1" value="0">
+                    <output for="adress" id="adress_out">1</output>
+                </fieldset>
             </div>
             <!-- End of Main Content -->
 
